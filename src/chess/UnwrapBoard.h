@@ -3,12 +3,12 @@
 #include "BitBoard.h"
 
 namespace chess {
-  struct InfoBoard {
+  struct UnwrapBoard {
     struct AllAndBlack {};
     BitBoard all;
     BitBoard notWhite;
     BitBoard notBlack;
-    InfoBoard(AllAndBlack, 
+    UnwrapBoard(AllAndBlack, 
       const BitBoard& all, 
       const BitBoard& black
     ):all(all), 

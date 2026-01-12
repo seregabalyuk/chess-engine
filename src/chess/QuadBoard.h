@@ -3,7 +3,7 @@
 #include "../bit/reverse.h"
 #include "../bit/next.h"
 #include "BitBoard.h"
-#include "InfoBoard.h"
+#include "UnwrapBoard.h"
 #include "Codes.h"
 #include "FigureTypes.h"
 #include "attack/all.h"
@@ -133,8 +133,8 @@ namespace chess {
       return all() ^ black();
     }
 
-    InfoBoard info() const {
-      return InfoBoard(InfoBoard::AllAndBlack{}, all(), black());
+    UnwrapBoard info() const {
+      return UnwrapBoard(UnwrapBoard::AllAndBlack{}, all(), black());
     }
 
     QuadBoard& invert() & {

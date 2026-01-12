@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../attack/all.h"
-#include "../InfoBoard.h"
+#include "../UnwrapBoard.h"
 
 
 namespace chess::move {

@@ -6,7 +6,7 @@
 
 
 namespace chess::move {
-  template<class Info = InfoBoard>
+  template<class Info = UnwrapBoard>
   class GeneratorPassant {
     const QuadBoard* board;
     const Info* info;

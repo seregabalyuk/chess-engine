@@ -2,7 +2,7 @@
 
 #include "chess/BitBoard.h"
 #include "chess/QuadBoard.h"
-#include "chess/InfoBoard.h"
+#include "chess/UnwrapBoard.h"
 #include "chess/FigureTypes.h"
 #include "chess/Codes.h"
 
