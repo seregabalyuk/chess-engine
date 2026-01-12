@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package chess_grpc;
+
+service Chess {
+  rpc MakeMove (MoveRequest) returns (MoveResponse) {}
+}
+
+message MoveRequest {
+  string board_state = 1;
+  bool is_white = 2;
+}
+
+message MoveResponse {
+  string board_state = 1;
+}
+
