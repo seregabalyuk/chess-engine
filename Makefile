@@ -4,8 +4,8 @@ DIRTESTS = tests
 DIRBUILD = build
 DIRLOGS = logs
 
-COMPILERCPP = g++
-FLAGS = -std=c++2a -O3
+COMPILERCPP = g++-13
+FLAGS = -std=c++23 -O3
 # INCLUDELIB = -I./$(DIRSRC)
 
 CPPTESTFILES = $(wildcard $(DIRTESTS)/*.cpp)
@@ -19,6 +19,8 @@ DEPFILES = $(patsubst %, $(DIRBUILD)/%.d, $(TESTFILES))
 
 STRDONE = \033[92m - Done:\033[0m
 STRTESTED = \033[92m - Tested:\033[0m
+
+.PHONY: all test
 
 all: $(DIRBUILD) $(DIRBIN) $(DIRLOGS) $(BINFILES)
 
