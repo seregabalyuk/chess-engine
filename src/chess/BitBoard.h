@@ -64,4 +64,14 @@ namespace chess {
   int countBB(const BitBoard& bitboard) {
     return __builtin_popcountll(bitboard);
   }
+
+  int scalarProduct(BitBoard bitboard, const int* values) {
+    int score = 0;
+    while (bitboard) {
+      int idx = __builtin_ctzll(bitboard);
+      score += values[idx];
+      bitboard &= bitboard - 1;
+    }
+    return score;
+  }
 } // namespace chess
