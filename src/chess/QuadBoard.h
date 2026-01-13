@@ -111,10 +111,9 @@ namespace chess {
       std::string ret;
       for (int i = 0; i < 64; ++ i) {
         if (code2Char(get(i)) == '.') {
-          if (ret.size()) {
-            if ('0' <= ret.back() && ret.back() <= '9') {
+          if (ret.size() && '0' <= ret.back() && ret.back() <= '9') {
               ++ ret.back();
-            } else {
+          } else {
               ret.push_back('1');
             }
           } else {
