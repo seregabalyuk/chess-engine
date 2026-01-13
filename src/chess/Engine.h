@@ -35,9 +35,6 @@ namespace chess {
     std::vector<Info> infos;
 
 
-    
-
-
     Engine(size_t reserve = 200000)  {
       boards.reserve(reserve);
       infos.reserve(reserve);

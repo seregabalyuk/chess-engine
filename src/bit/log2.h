@@ -26,10 +26,10 @@ namespace bit {
   }
 
   constexpr uint64_t specLog2 (uint64_t value) {
+    return 63 - __builtin_clzll(value);
     return tab64[value * 0x07EDD5E59A4E28C2 >> 58];
   }
 } // namespace bit
-
 
 static_assert(16ULL == (1ULL << bit::log2(16ULL)), "not correct bit::number work");
 static_assert(1ULL == (1ULL << bit::log2(1ULL)), "not correct bit::number work");
