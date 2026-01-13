@@ -13,7 +13,8 @@
 #include "chess/move/GeneratorPassant.h"
 
 #include "chess/nextPositions.h"
-#include "chess/Tree.h"
+#include "chess/alphabeta.h"
+
 
 
 

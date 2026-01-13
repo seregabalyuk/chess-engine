@@ -38,9 +38,7 @@ void next(
 
 int main() {
   auto moves = std::vector(1, std::vector(1, 
-    chess::QuadBoard(
-      "8/8/8/8/p1p1p1p1/8/PPPPPPPP/8" 
-    )
+    chess::startingPosition
   ));
   moves[0][0].dualRotation();
   std::cout << moves[0][0].toString() << '\n';

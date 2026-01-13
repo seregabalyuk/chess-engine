@@ -5,7 +5,7 @@
 //#include "move/GeneratorPassant.h"
 #include "eval.h"
 
-#include <vector>
+#include <iostream>
 
 
 namespace chess {
@@ -27,16 +27,17 @@ namespace chess {
   }
 
   inline void setalphabeta(float& alpha, float& beta, float val, std::integral_constant<int, 1>) {
-    alpha = alpha < val : val ? alpha;
+    alpha = alpha < val ? val : alpha;
   }
 
   inline void setalphabeta(float& alpha, float& beta, float val, std::integral_constant<int, 0>) {
-    beta = beta > val : val ? beta;
+    beta = beta > val ? val : beta;
   }
 
 
   template<int Color>
-  float alphabeta(const QuadBoard& board, int deep, float alpha, float beta, std::integral_constant<int, Color>) & {
+  float alphabeta(const QuadBoard& board, int deep, float alpha, float beta, std::integral_constant<int, Color>) {
+    //std::cout << deep << '\n';
     if (deep == 0) {
       return eval(board);
     }
@@ -49,50 +50,50 @@ namespace chess {
     {
       chess::move::Generator gen(board, info);
       if(gen.changeFigure(chess::Rook<Color>())) {
-        while (!gen.isEmpty()) {
+         while (!gen.isEmpty()) {
           auto next = gen.next(chess::Rook<Color>());
-          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext()), color);
-          if (returnminmax(alpha, beta, value, color)) goto exit;
+          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext), color);
+          if (returnminmax(alpha, beta, value, color)) return value;
           setalphabeta(alpha, beta, value, color);
         }
       }
       if(gen.changeFigure(chess::Bishop<Color>())) {
         while (!gen.isEmpty()) {
           auto next = gen.next(chess::Bishop<Color>());
-          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext()), color);
-          if (returnminmax(alpha, beta, value, color)) goto exit;
+          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext), color);
+          if (returnminmax(alpha, beta, value, color)) return value;
           setalphabeta(alpha, beta, value, color);
         }
       }
       if(gen.changeFigure(chess::Knight<Color>())) {
         while (!gen.isEmpty()) {
           auto next = gen.next(chess::Knight<Color>());
-          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext()), color);
-          if (returnminmax(alpha, beta, value, color)) goto exit;
+          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext), color);
+          if (returnminmax(alpha, beta, value, color)) return value;
           setalphabeta(alpha, beta, value, color);
         }
       }
       if(gen.changeFigure(chess::King<Color>())) {
         while (!gen.isEmpty()) {
           auto next = gen.next(chess::King<Color>());
-          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext()), color);
-          if (returnminmax(alpha, beta, value, color)) goto exit;
+          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext), color);
+          if (returnminmax(alpha, beta, value, color)) return value;
           setalphabeta(alpha, beta, value, color);
         }
       }
       if(gen.changeFigure(chess::Queen<Color>())) {
         while (!gen.isEmpty()) {
           auto next = gen.next(chess::Queen<Color>());
-          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext()), color);
-          if (returnminmax(alpha, beta, value, color)) goto exit;
+          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext), color);
+          if (returnminmax(alpha, beta, value, color)) return value;
           setalphabeta(alpha, beta, value, color);
         }
       }
       if(gen.changeFigure(chess::Pawn<Color>())) {
         while (!gen.isEmpty()) {
           auto next = gen.next(chess::Pawn<Color>());
-          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext()), color);
-          if (returnminmax(alpha, beta, value, color)) goto exit;
+          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext), color);
+          if (returnminmax(alpha, beta, value, color)) return value;
           setalphabeta(alpha, beta, value, color);
         }
       } 
@@ -102,13 +103,12 @@ namespace chess {
       if(genPas.changeColor(color)) {
         while (!genPas.isEmptyThis()) {
           auto next = genPas.nextThis(color);
-          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext()), color);
-          if (returnminmax(alpha, beta, value, color)) goto exit;
+          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext), color);
+          if (returnminmax(alpha, beta, value, color)) return value;
           setalphabeta(alpha, beta, value, color);
         }
       }
     }
-    exit:
     return value;
   }
 

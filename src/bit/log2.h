@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cassert>
 
 
 namespace bit {
@@ -26,8 +27,11 @@ namespace bit {
   }
 
   constexpr uint64_t specLog2 (uint64_t value) {
+    if (value == 0) { 
+      assert(("you were trying siuka blyat" , false));
+    }
     return 63 - __builtin_clzll(value);
-    return tab64[value * 0x07EDD5E59A4E28C2 >> 58];
+    //return tab64[value * 0x07EDD5E59A4E28C2 >> 58];
   }
 } // namespace bit
 

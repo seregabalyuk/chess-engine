@@ -106,6 +106,28 @@ namespace chess {
       return ret;
     }
 
+    std::string toFEN() const {
+      std::string ret;
+      for (int i = 0; i < 64; ++ i) {
+        if (code2Char(get(i)) == '.') {
+          if (ret.size()) {
+            if ('0' <= ret.back() && ret.back() <= '9') {
+              ++ ret.back();
+            } else {
+              ret.push_back('1');
+            }
+          }
+        } else {
+          ret.push_back(code2Char(get(i)));
+        }
+        if (i % 8 == 7) {
+          ret.push_back('/');
+        }
+      }
+      ret.pop_back();
+      return ret;
+    }
+
     std::string toCoolString() const {
       std::string ret;
       for (int i = 0; i < 64; ++ i) {

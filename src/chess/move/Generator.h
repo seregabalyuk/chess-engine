@@ -5,6 +5,7 @@
 #include "../../bit/next.h"
 #include "../Codes.h"
 
+//#include <iostream>
 
 namespace chess::move {
   template<class Info = UnwrapBoard>
@@ -20,11 +21,17 @@ namespace chess::move {
     template<int Code>
     void _updatePos(std::integral_constant<int, Code>) {
       using Figure = std::integral_constant<int, Code>;
+      
       if (!moves) {
-        while (!moves && pos) {
+        while (!moves) {
           pos = bit::next(nextPoses);
+          if (!pos) {
+            return;
+          }
           moves = byCode(*info, pos, Figure());
+          //std::cout << "penis\n";
         }
+        //std::cout << "not penis\n";
         if (pos) {
           withoutFigure = *board;
           withoutFigure.free(pos);
