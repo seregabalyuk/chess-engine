@@ -22,6 +22,7 @@ app = FastAPI()
 
 class MoveRequest(BaseModel):
     fen: str
+    turn: str = "w"
 
 # gRPC channel setup
 # Connect to the C++ server running on localhost:50051
@@ -30,33 +31,27 @@ stub = chess_pb2_grpc.ChessStub(channel) if 'chess_pb2_grpc' in locals() else No
 
 @app.post("/move")
 async def make_move(request: MoveRequest):
-    print(f"Received FEN: {request.fen}")
+    print(f"--- Move Request Received ---")
+    print(f"Frontend FEN: {request.fen}")
+    print(f"Frontend Turn: {request.turn}")
+
     if stub is None:
+        print("ERROR: gRPC stub is None")
         raise HTTPException(status_code=503, detail="gRPC stub not initialized. Is the generated code present?")
 
-    board = chess.Board(request.fen)
+    # Initialize board with the position string
+    # If the FEN is incomplete (only position), chess.Board might default to White turn.
+    # We must set the turn explicitly to ensure correct logic if we depend on board.turn
+    # board = chess.Board(request.fen)
+    # board.turn = chess.WHITE if request.turn == 'w' else chess.BLACK
     
-    if board.is_game_over():
-        return {"fen": board.fen(), "game_over": True}
+    # if board.is_game_over():
+    #     return {"fen": board.fen(), "game_over": True}
 
     # Determine whose turn it is
-    # The C++ engine needs to know the color it is playing
-    # If the user just moved (which is what we assume happened before this call),
-    # then the current turn in FEN is the engine's turn.
-    is_white_turn = board.turn == chess.WHITE
-    
-    # Prepare gRPC request
-    # The C++ engine expects board_state and is_white (true for White, false for Black)
-    # logic in C++ main.cpp:
-    # if (is_white) nextPositions(..., 0, ...) -> 0 is White in that codebase?
-    # Let's double check C++ main.cpp logic.
-    # main.cpp:
-    # if (is_white) { chess::nextPositions(..., 0, ...) } else { chess::nextPositions(..., 1, ...) }
-    # Engine.h: Info(..., Color) -> (Color == 1) usually means Black or White depending on convention.
-    # FigureTypes.h: Rook<0> is 'R' (White), Rook<1> is 'r' (Black).
-    # So 0 is White, 1 is Black.
-    # So if is_white is true, it calls nextPositions with 0 (White).
-    # So passing is_white=True means generate moves for White.
+    # is_white_turn = board.turn == chess.WHITE
+    is_white_turn = request.turn == 'w'
+    print(f"Calculated is_white_turn: {is_white_turn}")
     
     grpc_request = chess_pb2.MoveRequest(
         board_state=request.fen,
@@ -64,27 +59,34 @@ async def make_move(request: MoveRequest):
     )
 
     try:
+        print("Sending request to C++ engine...")
         response = stub.MakeMove(grpc_request)
         new_fen = response.board_state
+        print(f"Engine response FEN: {new_fen}")
         
-        # Verify if the returned FEN is valid
-        # The C++ engine returns a FEN-like string.
-        # If it returns the same board state, it might mean no moves found.
-        
-        # Let's check if new_fen is different
+        # Check if engine returned an error (same state)
         if new_fen == request.fen:
-             # Checkmate or stalemate or error
-             # If game was not over, but engine returned same state, it implies no move could be made.
+             print("ERROR: Engine returned same FEN (Stalemate/Checkmate/Error)")
              return {"fen": new_fen, "game_over": True, "error": "No move returned by engine (Stalemate/Checkmate/Error)"}
 
+        # The C++ engine returns a FEN-like string, but potentially only the board part or visual string.
+        # If the frontend expects a full FEN or can handle partial, we just return what we got.
+        # However, to be safe for the frontend's next turn, we might want to append turn info if missing?
+        # But let's trust the frontend/engine contract for now or return as is.
+        # If new_fen is just position, the frontend will need to know it's the other player's turn now.
+        # But wait, if C++ returns visual string, we might need to parse it back to FEN?
+        # Let's return raw new_fen for now as requested.
+        
+        print("Returning success response to frontend")
         return {"fen": new_fen, "game_over": False}
 
     except grpc.RpcError as e:
+        print(f"gRPC Error: {e.details()}")
         raise HTTPException(status_code=500, detail=f"gRPC error: {e.details()}")
     except Exception as e:
+        print(f"General Error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
-
