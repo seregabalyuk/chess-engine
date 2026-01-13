@@ -117,6 +117,8 @@ namespace chess {
             } else {
               ret.push_back('1');
             }
+          } else {
+            ret.push_back('1');
           }
         } else {
           ret.push_back(code2Char(get(i)));
