@@ -36,18 +36,17 @@ namespace chess {
 
 
   template<int Color>
-  float alphabeta(const QuadBoard& pos, int deep, float alpha, float beta, std::integral_constant<int, Color>) & {
+  float alphabeta(const QuadBoard& board, int deep, float alpha, float beta, std::integral_constant<int, Color>) & {
     if (deep == 0) {
-      return eval(pos);
+      return eval(board);
     }
     constexpr auto color = std::integral_constant<int, Color>();
     constexpr auto colorNext = std::integral_constant<int, Color == 0>();
     
     
     float value = Color ? -10000000: 100000000;
+    auto info = board.info();
     {
-      auto info = pos.info();
-      move::Generator gen(pos, info);
       chess::move::Generator gen(board, info);
       if(gen.changeFigure(chess::Rook<Color>())) {
         while (!gen.isEmpty()) {
