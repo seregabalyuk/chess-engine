@@ -130,7 +130,7 @@ std::string make_move(const std::string& board_state, int deep, std::integral_co
 class ChessServiceImpl final : public Chess::Service {
     Status MakeMove(ServerContext* context, const MoveRequest* request,
                   MoveResponse* reply) override {
-        std::cout << "okkk\n";
+        std::cout << "okkk" << std::endl;
         auto new_board_state = request->is_white() ? 
           make_move(request->board_state(), 4, std::integral_constant<int, 0>()) : 
           make_move(request->board_state(), 4, std::integral_constant<int, 1>());

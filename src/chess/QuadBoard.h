@@ -21,6 +21,7 @@ namespace chess {
       int i = 0;
       int j = 0;
       for (char c: fen) {
+        if (c == ' ') break;
         if (c == '/') {
           i += 8;
           j = 0;
