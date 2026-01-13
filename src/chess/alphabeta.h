@@ -96,6 +96,17 @@ namespace chess {
           if (returnminmax(alpha, beta, value, color)) goto exit;
           setalphabeta(alpha, beta, value, color);
         }
+      } 
+    }
+    {
+      chess::move::GeneratorPassant genPas(board, info);
+      if(genPas.changeColor(color)) {
+        while (!genPas.isEmptyThis()) {
+          auto next = genPas.nextThis(color);
+          value = minmax(value, alphabeta(next, deep - 1, alpha, beta, colorNext()), color);
+          if (returnminmax(alpha, beta, value, color)) goto exit;
+          setalphabeta(alpha, beta, value, color);
+        }
       }
     }
     exit:
