@@ -1,5 +1,7 @@
 frontend/node_modules
 backend/.venv
+backend/chess_pb2.py
+backend/chess_pb2_grpc.py
 
 
 # from https://github.com/github/gitignore/blob/main/Python.gitignore
