@@ -60,4 +60,8 @@ namespace chess {
     }
     return ret;
   }
+
+  int countBB(const BitBoard& bitboard) {
+    return __builtin_popcountll(bitboard);
+  }
 } // namespace chess
