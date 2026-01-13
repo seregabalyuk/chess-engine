@@ -132,8 +132,8 @@ class ChessServiceImpl final : public Chess::Service {
                   MoveResponse* reply) override {
         std::cout << "okkk" << std::endl;
         auto new_board_state = request->is_white() ? 
-          make_move(request->board_state(), 4, std::integral_constant<int, 0>()) : 
-          make_move(request->board_state(), 4, std::integral_constant<int, 1>());
+          make_move(request->board_state(), 6, std::integral_constant<int, 0>()) : 
+          make_move(request->board_state(), 6, std::integral_constant<int, 1>());
         reply->set_board_state(new_board_state);
         return Status::OK;
     }

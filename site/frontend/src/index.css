@@ -1,3 +1,6 @@
+/* Chessboard.js CSS is loaded via CDN or import, but we need custom styles here */
+@import url('https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css');
+
 body {
   margin: 0;
   display: flex;
@@ -49,7 +52,7 @@ button {
 }
 
 .spinner-container {
-  height: 60px; /* Fixed height container for spinner */
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,10 +68,6 @@ button {
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

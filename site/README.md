@@ -65,13 +65,15 @@ npm run dev
 ```
 *The frontend typically runs on http://localhost:5173.*
 
+Note: The frontend now uses `chessboard.js` (via CDN) and `jquery`. These are loaded dynamically.
+
 ## Usage
 
 1.  Open your browser to the Frontend URL (e.g., http://localhost:5173).
-2.  You will see a Chess Board.
-3.  Make a move (White).
+2.  Click "Play White" or "Play Black".
+3.  Make a move by dragging and dropping pieces.
 4.  The Frontend sends the move to the Python Backend.
 5.  The Python Backend asks the C++ Engine for a response move via gRPC.
-6.  The C++ Engine calculates and returns the new board state.
+6.  The C++ Engine calculates and returns the new board state (position string).
 7.  The board updates with the engine's move.
 
